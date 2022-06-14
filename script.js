@@ -48,20 +48,18 @@ function getResult() {
         if (this.status == 200 || this.status == 304) {
             if (document.body.contains(document.getElementById("table"))) {
                 document.getElementById("table").remove();
-                console.log("Removed child.")
             }
 
             if (document.body.contains(document.getElementById("name"))) {
                 document.getElementById("name").remove();
-                console.log("Removed child.")
+
             }
 
             if (document.body.contains(document.getElementById("htnoout"))) {
                 document.getElementById("htnoout").remove();
-                console.log("Removed child.")
+
             }
 
-            console.log(typeof(this.responseText));
             let data = JSON.parse(this.responseText);
             let name = toTitleCase(data.name);
             let htno = data.htno;
@@ -73,7 +71,6 @@ function getResult() {
             nh2.innerHTML = `${htno}`;
             nh2.id = "htnoout";
             document.body.appendChild(nh2);
-            console.log(data);
             let table = document.createElement("table");
             table.id = "table";
             let headingrow = document.createElement("tr");
@@ -96,20 +93,36 @@ function getResult() {
             }
 
             document.body.appendChild(table);
-            console.log("For getRequest: " + this.responseText);
+            let gvdict = { "O": 10, "A+": 9, "A": 8, "B+": 7, "B": 6, "C": 5, "F": 0 };
+            let gct = 0;
+            let ct = 0;
+            for (let i = 0; i < data.credits.length; i++) {
+                gct += parseFloat(data.credits[i]) * gvdict[data.grade[i]];
+                ct += parseFloat(data.credits[i]);
+            }
+
+            let cgpa = gct / ct;
+            let CGPA = document.createElement("h2");
+            CGPA.innerHTML = `Your CGPA is ${cgpa.toFixed(2)}`;
+            document.body.appendChild(CGPA);
+
         } else document.write("Error " + this.status);
     }
-    console.log(xhr);
     xhr.send(JSON.stringify({
         "htno": `${document.getElementById("htno").value}`,
     }));
 
 }
 
+function gradeToValue(str) {
+    let gvdict = { "O": 10, "A+": 9, "A": 8.5, "B+": 8, "B": 7, "C": 6, "F": 0 };
+    return gvdict[str];
+}
+
 function something(rtext) {
-    console.log(typeof(rtext));
+
     let data = JSON.parse(rtext);
-    console.log(data);
+
     let table = document.createElement("table");
     let headingrow = document.createElement("tr");
     let headings = ["Subject Code", "Subject Name", "Internal Marks", "External Marks", "Total Marks", "Grade", "Credits"];
