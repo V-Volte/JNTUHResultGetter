@@ -20,8 +20,7 @@ app.post('/', (req, res) => {
     exec(command, (error, stdout, stderr) => {
         if (error) {
             res.send(error);
-        }
-        if (stderr) {
+        } else if (stderr) {
             res.send(stderr);
         } else {
             let x = fs.readFile('./reqtab.json', 'utf8', (err, data) => {
