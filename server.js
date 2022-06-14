@@ -40,21 +40,21 @@ app.post('/', (req, res) => {
 
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname + "/index.html"));
-});
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname + "/index.html"));
+// });
 
-app.get('/script.js', (req, res) => {
-    res.sendFile(path.join(__dirname + "/script.js"));
-});
+// app.get('/script.js', (req, res) => {
+//     res.sendFile(path.join(__dirname + "/script.js"));
+// });
 
-app.get('/favicon.ico', (req, res) => {
-    res.sendFile(path.join(__dirname + '/favicon.ico'));
-});
+// app.get('/favicon.ico', (req, res) => {
+//     res.sendFile(path.join(__dirname + '/favicon.ico'));
+// });
 
-app.get('/style.css', (req, res) => {
-    res.sendFile(path.join(__dirname + "/style.css"));
-});
+// app.get('/style.css', (req, res) => {
+//     res.sendFile(path.join(__dirname + "/style.css"));
+// });
 
 app.listen(port, () => {
     console.log("Server started at port " + port);
