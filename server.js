@@ -50,4 +50,6 @@ app.get('/style.css', (req, res) => {
     res.sendFile(__dirname + "/style.css");
 });
 
-app.listen(6969);
+app.listen(process.env.PORT || 3003, () => {
+    console.log("Server started at port 3003");
+});
