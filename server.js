@@ -5,6 +5,8 @@ let request = require('request');
 const { exec } = require('child_process');
 var fs = require('fs');
 
+const port = process.env.PORT || 5000;
+
 app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -50,6 +52,6 @@ app.get('/style.css', (req, res) => {
     res.sendFile(__dirname + "/style.css");
 });
 
-app.listen(process.env.PORT || 3003, () => {
+app.listen(port, () => {
     console.log("Server started at port 3003");
 });
