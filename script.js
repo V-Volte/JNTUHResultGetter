@@ -60,6 +60,10 @@ function getResult() {
 
             }
 
+            if (document.body.contains(document.getElementById("cgpa"))) {
+                document.getElementById("cgpa").remove();
+            }
+
             let data = JSON.parse(this.responseText);
             let name = toTitleCase(data.name);
             let htno = data.htno;
@@ -104,6 +108,7 @@ function getResult() {
             let cgpa = gct / ct;
             let CGPA = document.createElement("h2");
             CGPA.innerHTML = `Your CGPA is ${cgpa.toFixed(2)}`;
+            CGPA.id = "cgpa";
             document.body.appendChild(CGPA);
 
         } else document.write("Error " + this.status);
