@@ -4,6 +4,7 @@ let bodyParser = require('body-parser');
 let request = require('request');
 const { exec } = require('child_process');
 var fs = require('fs');
+const path = require('path');
 
 const port = process.env.PORT || 5000;
 
@@ -40,18 +41,21 @@ app.post('/', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + "/index.html");
+    res.sendFile(path.join(__dirname + "/index.html"));
 });
 
 app.get('/script.js', (req, res) => {
-    res.sendFile(__dirname + "/script.js");
+    res.sendFile(path.join(__dirname + "/script.js"));
 });
 
+app.get('/favicon.ico', (req, res) => {
+    res.sendFile(path.join(__dirname + '/favicon.ico'));
+});
 
 app.get('/style.css', (req, res) => {
-    res.sendFile(__dirname + "/style.css");
+    res.sendFile(path.join(__dirname + "/style.css"));
 });
 
 app.listen(port, () => {
-    console.log("Server started at port 3003");
+    console.log("Server started at port " + port);
 });
