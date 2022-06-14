@@ -1,0 +1,14 @@
+              0              1              2                             3
+0         HTNO:     20S11A6630          NAME:  REMELLA RAGHAVENDRA SRINIVAS
+1  FATHER NAME:  RSVVSRB SARMA  COLLEGE CODE:                            S1
+              0                                         1         2         3      4      5           6
+0  SUBJECT CODE                              SUBJECT NAME  INTERNAL  EXTERNAL  TOTAL  GRADE  CREDITS(C)
+1         15307                       DATA STRUCTURES LAB        25        73     98      O         1.5
+2         15332                  GENDER SENSITIZATION LAB        95         0     95      O           0
+3         15336                    PYTHON PROGRAMMING LAB        25        74     99      O         1.5
+4         153AE   BUSINESS ECONOMICS & FINANCIAL ANALYSIS        17        32     49      C           3
+5         153AG    COMPUTER ORGANIZATION AND ARCHITECTURE        24        26     50      B           3
+6         153AK                           DATA STRUCTURES        25        42     67     B+           4
+7         153CD                        PYTHON PROGRAMMING        21        44     65     B+           2
+8         153CF                      DISCRETE MATHEMATICS        22        35     57      B           3
+9         153CH  MATHEMATICAL AND STATISTICAL FOUNDATIONS        24        38     62     B+           3

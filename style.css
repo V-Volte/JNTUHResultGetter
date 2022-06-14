@@ -1,0 +1,60 @@
+body {
+    background-color: #121212;
+    color: #fff;
+}
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+input {
+    padding: 10px 20px;
+    font-family: sans-serif;
+    border: none;
+    background-color: #343434;
+    color: white;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    font-family: sans-serif;
+    background-color: #0055cf;
+    color: white;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #0033af;
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+    padding: 10px;
+    font-family: sans-serif;
+    margin-top: 20px;
+}
+
+tr,
+td,
+th {
+    padding: 15px;
+    text-align: left;
+}
+
+td {
+    border-bottom: 1px solid #aaa;
+}
+
+th {
+    background-color: #0055cf;
+}
+
+h1,
+h2 {
+    font-family: sans-serif;
+    font-weight: 400;
+}
