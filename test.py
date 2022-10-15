@@ -9,22 +9,22 @@ url = "http://results.jntuh.ac.in/resultAction"
 data = f"degree=btech&examCode=1560&etype=r17&result=null&grad=null&type=intgrade&htno={sys.argv[1]}"
 headers = {
     "Content-type": "application/x-www-form-urlencoded",
-            "Host": "results.jntuh.ac.in",
+    "Host": "results.jntuh.ac.in",
             "Origin": "results.jntuh.ac.in",
-            
+
 }
 x = requests.post(url, data=data, headers=headers)
 # print(x.status_code)
 # print(x.text)
 v = x.text
-f = open('response.txt', 'w');
-f.write(x.text);
-f.close();
+# f = open('response.txt', 'w')
+# f.write(x.text)
+# f.close()
 soup = BeautifulSoup(v, 'lxml')
 
-tables = pd.read_html('response.txt')
-reqtab = tables[0];
-reqtab2 = tables[1];
+tables = pd.read_html(x.text)
+reqtab = tables[0]
+reqtab2 = tables[1]
 
 tables = soup.find_all("table")
 
@@ -42,7 +42,7 @@ i = 0
 for tr in trs:
     if i != 0:
         tds = tr.find_all("td")
-        
+
         subcodes.append(tds[0].text)
         subjnames.append(tds[1].text)
         internal.append(tds[2].text)
@@ -69,11 +69,8 @@ jsonstr += '"credits":' + json.dumps(credits) + ','
 jsonstr += '"name" : ' + json.dumps(tds[3].text) + ','
 jsonstr += '"htno" : ' + json.dumps(tds[1].text) + '}'
 
-f = open('reqtab.json', 'w');
-f.write(jsonstr);
-f.close();
-
-
-
-
-
+print(jsonstr)
+sys.stdout.flush()
+# f = open('reqtab.json', 'w');
+# f.write(jsonstr);
+# f.close();

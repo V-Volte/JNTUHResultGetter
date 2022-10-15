@@ -102,7 +102,11 @@ function getResult() {
             }
 
             let cgpa = gct / ct;
+            if (document.body.contains(document.getElementById('CGPA'))) {
+                document.body.removeChild(document.getElementById('CGPA'));
+            }
             let CGPA = document.createElement("h2");
+            CGPA.id = 'CGPA';
             CGPA.innerHTML = `Your CGPA is ${cgpa.toFixed(2)}`;
             document.body.appendChild(CGPA);
 

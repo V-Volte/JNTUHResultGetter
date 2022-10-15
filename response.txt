@@ -247,6 +247,12 @@ tr:nth-child(even) {
 			
 			
 			
+			
+			
+			
+			
+			
+			
 			<h6 align="center">
 				Result of
 				II B.Tech. I Semester (R18) Regular, March
@@ -261,14 +267,14 @@ tr:nth-child(even) {
 
 				<tr>
 					<td><b>HTNO:</b></td>
-					<td><b>20S11A6630</b></td>
+					<td><b>20S11A6615</b></td>
 					<td><b>NAME:</b></td>
-					<td><b>REMELLA RAGHAVENDRA SRINIVAS</b></td>
+					<td><b>S KAMAL SANJAY</b></td>
 				</tr>
 
 				<tr>
 					<td><b>FATHER NAME:</b></td>
-					<td><b>RSVVSRB SARMA</b></td>
+					<td><b>S SREENIVASULU</b></td>
 					<td><b>COLLEGE CODE:</b></td>
 					<td><b>S1</b></td>
 				</tr>
@@ -324,8 +330,8 @@ tr:nth-child(even) {
 									<td><b>15307</b></td>
 									<td><b>DATA STRUCTURES LAB</b></td>
 									<td><b>25</b></td>
-									<td><b>73</b></td>
-									<td><b>98</b></td>
+									<td><b>72</b></td>
+									<td><b>97</b></td>
 									<td><b>O</b></td>
 									
 									
@@ -341,9 +347,9 @@ tr:nth-child(even) {
 								<tr>
 									<td><b>15332</b></td>
 									<td><b>GENDER SENSITIZATION LAB</b></td>
-									<td><b>95</b></td>
+									<td><b>92</b></td>
 									<td><b>0</b></td>
-									<td><b>95</b></td>
+									<td><b>92</b></td>
 									<td><b>O</b></td>
 									
 									
@@ -360,8 +366,8 @@ tr:nth-child(even) {
 									<td><b>15336</b></td>
 									<td><b>PYTHON PROGRAMMING LAB</b></td>
 									<td><b>25</b></td>
-									<td><b>74</b></td>
-									<td><b>99</b></td>
+									<td><b>72</b></td>
+									<td><b>97</b></td>
 									<td><b>O</b></td>
 									
 									
@@ -377,9 +383,9 @@ tr:nth-child(even) {
 								<tr>
 									<td><b>153AE</b></td>
 									<td><b>BUSINESS ECONOMICS & FINANCIAL ANALYSIS</b></td>
-									<td><b>17</b></td>
-									<td><b>32</b></td>
-									<td><b>49</b></td>
+									<td><b>20</b></td>
+									<td><b>26</b></td>
+									<td><b>46</b></td>
 									<td><b>C</b></td>
 									
 									
@@ -395,10 +401,10 @@ tr:nth-child(even) {
 								<tr>
 									<td><b>153AG</b></td>
 									<td><b>COMPUTER ORGANIZATION AND ARCHITECTURE</b></td>
-									<td><b>24</b></td>
+									<td><b>22</b></td>
 									<td><b>26</b></td>
-									<td><b>50</b></td>
-									<td><b>B</b></td>
+									<td><b>48</b></td>
+									<td><b>C</b></td>
 									
 									
 									
@@ -413,9 +419,9 @@ tr:nth-child(even) {
 								<tr>
 									<td><b>153AK</b></td>
 									<td><b>DATA STRUCTURES</b></td>
-									<td><b>25</b></td>
-									<td><b>42</b></td>
-									<td><b>67</b></td>
+									<td><b>24</b></td>
+									<td><b>44</b></td>
+									<td><b>68</b></td>
 									<td><b>B+</b></td>
 									
 									
@@ -431,9 +437,9 @@ tr:nth-child(even) {
 								<tr>
 									<td><b>153CD</b></td>
 									<td><b>PYTHON PROGRAMMING</b></td>
-									<td><b>21</b></td>
-									<td><b>44</b></td>
-									<td><b>65</b></td>
+									<td><b>22</b></td>
+									<td><b>46</b></td>
+									<td><b>68</b></td>
 									<td><b>B+</b></td>
 									
 									
@@ -449,9 +455,9 @@ tr:nth-child(even) {
 								<tr>
 									<td><b>153CF</b></td>
 									<td><b>DISCRETE MATHEMATICS</b></td>
-									<td><b>22</b></td>
-									<td><b>35</b></td>
-									<td><b>57</b></td>
+									<td><b>25</b></td>
+									<td><b>34</b></td>
+									<td><b>59</b></td>
 									<td><b>B</b></td>
 									
 									
@@ -467,9 +473,9 @@ tr:nth-child(even) {
 								<tr>
 									<td><b>153CH</b></td>
 									<td><b>MATHEMATICAL AND STATISTICAL FOUNDATIONS</b></td>
-									<td><b>24</b></td>
-									<td><b>38</b></td>
-									<td><b>62</b></td>
+									<td><b>25</b></td>
+									<td><b>36</b></td>
+									<td><b>61</b></td>
 									<td><b>B+</b></td>
 									
 									
