@@ -42,22 +42,22 @@ function getResult() {
                 document.getElementById("htnoout").remove();
 
             }
-            // console.log("Response: ")
-            // console.log(this.responseText);
+
             let data = JSON.parse(this.responseText);
-            console.log(data);
             let sdata = data["subjects"];
-            console.log(JSON.stringify(sdata));
             let name = toTitleCase(data.name);
             let htno = data.htno;
+
             let nh = document.createElement('h1');
             nh.id = "name";
             nh.innerHTML = `${name}`;
             document.body.appendChild(nh);
+
             let nh2 = document.createElement('h2');
             nh2.innerHTML = `${htno}`;
             nh2.id = "htnoout";
             document.body.appendChild(nh2);
+
             let table = document.createElement("table");
             table.id = "table";
             let headingrow = document.createElement("tr");
@@ -73,14 +73,13 @@ function getResult() {
             let gvdict = { "O": 10, "A+": 9, "A": 8, "B+": 7, "B": 6, "C": 5, "F": 0 };
 
             table.appendChild(headingrow);
-            // console.log(sdata);
             for (let subjecta in sdata) {
                 console.log(subjecta);
                 let subject = sdata[subjecta];
                 let row = document.createElement("tr");
 
-                c += subject.credits;
-                cg += subject.credits * gvdict[subject.grade];
+                c += parseFloat(subject['credits']);
+                cg += parseFloat(subject['credits']) * parseInt(gvdict[subject['grade']]);
 
                 for (let key in subject) {
                     if (subject.hasOwnProperty(key)) {
