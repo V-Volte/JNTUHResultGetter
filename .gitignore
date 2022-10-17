@@ -5,4 +5,5 @@ response.txt
 test.*
 keys.json
 test/*
+test/
 data/
