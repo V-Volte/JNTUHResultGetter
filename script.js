@@ -16,27 +16,6 @@ function toTitleCase(str) {
 let changed = 0;
 
 function getResult() {
-    // let xhr = new XMLHttpRequest();
-    // xhr.open('POST', "http://results.jntuh.ac.in/resultAction", true);
-    // xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    // xhr.onreadystatechange = function() {
-    //     if (this.status == 200) document.write(this.responseText)
-    //     else document.write("Error " + this.status);
-    // }
-    // xhr.send("degree=btech&examCode=1560&etype=r17&result=null&grad=null&type=intgrade&htno=20S11A6611")
-    // fetch("http://localhost:6969/", {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-type": "application/json",
-    //     },
-    //     body: {
-    //         "htno": `${document.getElementById("htno").value}`,
-    //     }
-    // }).then(res => {
-    //     console.log(res);
-    //     document.write(res);
-    // });
-
     let htno = document.getElementById("htno").value;
     if (!htno) alert("Enter hallticket number");
 
@@ -45,7 +24,11 @@ function getResult() {
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
 
+        // console.log(this.status)
+        // console.log(this.responseText);
+
         if (this.status == 200 || this.status == 304) {
+
             if (document.body.contains(document.getElementById("table"))) {
                 document.getElementById("table").remove();
             }
@@ -59,8 +42,12 @@ function getResult() {
                 document.getElementById("htnoout").remove();
 
             }
-
+            // console.log("Response: ")
+            // console.log(this.responseText);
             let data = JSON.parse(this.responseText);
+            console.log(data);
+            let sdata = data["subjects"];
+            console.log(JSON.stringify(sdata));
             let name = toTitleCase(data.name);
             let htno = data.htno;
             let nh = document.createElement('h1');
@@ -80,28 +67,35 @@ function getResult() {
                 headingcell.innerHTML = heading;
                 headingrow.appendChild(headingcell);
             });
+
+            let cg = 0;
+            let c = 0;
+            let gvdict = { "O": 10, "A+": 9, "A": 8, "B+": 7, "B": 6, "C": 5, "F": 0 };
+
             table.appendChild(headingrow);
-            for (let i = 0; i < data.credits.length; i++) {
+            // console.log(sdata);
+            for (let subjecta in sdata) {
+                console.log(subjecta);
+                let subject = sdata[subjecta];
                 let row = document.createElement("tr");
-                let cells = [data.subcodes[i], data.subjnames[i], data.internal[i], data.external[i], data.total[i], data.grade[i], data.credits[i]];
-                cells.forEach(cell => {
-                    let celldata = document.createElement("td");
-                    celldata.innerHTML = cell;
-                    row.appendChild(celldata);
-                });
+
+                c += subject.credits;
+                cg += subject.credits * gvdict[subject.grade];
+
+                for (let key in subject) {
+                    if (subject.hasOwnProperty(key)) {
+                        let cell = document.createElement("td");
+                        cell.innerHTML = subject[key];
+                        row.appendChild(cell);
+                    }
+                }
+
                 table.appendChild(row);
             }
 
             document.body.appendChild(table);
-            let gvdict = { "O": 10, "A+": 9, "A": 8, "B+": 7, "B": 6, "C": 5, "F": 0 };
-            let gct = 0;
-            let ct = 0;
-            for (let i = 0; i < data.credits.length; i++) {
-                gct += parseFloat(data.credits[i]) * gvdict[data.grade[i]];
-                ct += parseFloat(data.credits[i]);
-            }
 
-            let cgpa = gct / ct;
+            let cgpa = cg / c;
             if (document.body.contains(document.getElementById('CGPA'))) {
                 document.body.removeChild(document.getElementById('CGPA'));
             }

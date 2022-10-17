@@ -1,4 +1,0 @@
-pandas
-requests
-BeautifulSoup4
-lxml

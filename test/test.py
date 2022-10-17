@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 
 url = "http://results.jntuh.ac.in/resultAction"
-data = f"degree=btech&examCode=1560&etype=r17&result=null&grad=null&type=intgrade&htno={sys.argv[1]}"
+data = f"degree=btech&etype=r17&result=null&grad=null&type=intgrade&htno={sys.argv[1]}&examCode=1560"
 headers = {
     "Content-type": "application/x-www-form-urlencoded",
     "Host": "results.jntuh.ac.in",
@@ -30,6 +30,8 @@ tables = soup.find_all("table")
 
 trs = tables[1].find_all("tr")
 
+subjects = {}
+
 snos = []
 subcodes = []
 subjnames = []
@@ -43,13 +45,15 @@ for tr in trs:
     if i != 0:
         tds = tr.find_all("td")
 
-        subcodes.append(tds[0].text)
-        subjnames.append(tds[1].text)
-        internal.append(tds[2].text)
-        external.append(tds[3].text)
-        total.append(tds[4].text)
-        grade.append(tds[5].text)
-        credits.append(tds[6].text)
+        subjects[tds[0].text] = [tds[1].text + tds[2].text + tds[3].text + tds[4].text + tds[5].text + tds[6].text]
+
+        # subcodes.append(tds[0].text)
+        # subjnames.append(tds[1].text)
+        # internal.append(tds[2].text)
+        # external.append(tds[3].text)
+        # total.append(tds[4].text)
+        # grade.append(tds[5].text)
+        # credits.append(tds[6].text)
     i += 1
 
 
