@@ -6,4 +6,5 @@ test.*
 keys.json
 test/*
 test/
+test/*.*
 data/
