@@ -29,7 +29,6 @@ function getAllResults(htno, callback) {
 }
 
 function getResults(htno, /*type = 'ra',*/ callback) {
-    let nparams = params;
     let config = {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -40,14 +39,17 @@ function getResults(htno, /*type = 'ra',*/ callback) {
     let code = JSON.parse(fs.readFileSync(__dirname + '/data/codes.json'))["1-1"][0];
 
     //TODO: Change examcode and type to not be hardcoded    
-    nparams.append("examCode", `1560`);
-    nparams.append("type", "intgrade");
-    nparams.append("htno", `${htno}`)
-
-    axios.post(url, nparams, config)
+    axios.post(url, {
+            "degree": "btech",
+            "etype": "r17",
+            "result": "null",
+            "grad": "null",
+            "examCode": "1560",
+            "type": "intgrade",
+            "htno": `${htno}`
+        }, config)
         .then(function(response) {
             let subjects = []
-            console.log(response.data)
             let soup = new JSSoup(response.data);
             let tables = soup.findAll("table")
             let trs = tables[1].findAll("tr");
@@ -75,17 +77,6 @@ function getResults(htno, /*type = 'ra',*/ callback) {
         .catch(function(error) {
             console.log(error);
         })
-}
-
-let params = new URLSearchParams();
-let paramdict = {
-    "degree": "btech",
-    "etype": "r17",
-    "result": "null",
-    "grad": "null",
-}
-for (let param in paramdict) {
-    params.append(param, paramdict[param]);
 }
 
 module.exports = {
