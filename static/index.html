@@ -6,14 +6,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result-Getter</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/fonts.css">
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 
 <body>
-    <input type="text" name="htno" id="htno">
-    <button onclick="getResult()" id="submit">Get Result</button>
 
-    <script src="script.js"></script>
+    <div class="top cover" id='topcont'>
+        <h1>
+            result-getter
+
+        </h1>
+
+        <div class="grouper grouperoriginal" id='grouper'>
+            <input type="text" class="inputoriginal" name="htno" id="htno" placeholder="Hallticket Number">
+            <button class="buttonoriginal" onclick="getResult()" id="submit">Get Results</button>
+        </div>
+
+    </div>
+
+    <div class="metacontainer">
+        <div class="container" id="container">
+
+        </div>
+    </div>
+
+
+    <script src="js/script.js"></script>
 </body>
 
 </html>
