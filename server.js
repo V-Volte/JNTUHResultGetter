@@ -6,7 +6,7 @@ const scraper = require(__dirname + '/resultgetter.js')
 const port = process.env.PORT || 5000;
 app.use('/', express.static(__dirname + '/static'))
 app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/', (req, res) => {
     let data = req.body;
