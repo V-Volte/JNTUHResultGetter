@@ -30,13 +30,13 @@ function getAllResults(htno, callback) {
 
 function getResults(htno, /*type = 'ra',*/ callback) {
     let config = {
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-            "Accept-Encoding": "*"
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                "Accept-Encoding": "*"
+            }
         }
-    }
-    let code = JSON.parse(fs.readFileSync(__dirname + '/data/codes.json'))["1-1"][0];
+        // let code = JSON.parse(fs.readFileSync(__dirname + '/data/codes.json'))["1-1"][0];
 
     //TODO: Change examcode and type to not be hardcoded    
     axios.post(url, {
