@@ -44,7 +44,7 @@ function getResults(htno, /*type = 'ra',*/ callback) {
             "etype": "r17",
             "result": "null",
             "grad": "null",
-            "examCode": "1560",
+            "examCode": "1605",
             "type": "intgrade",
             "htno": `${htno}`
         }, config)
