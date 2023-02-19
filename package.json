@@ -6,7 +6,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "intialize": "mkdir data && node codes.js",
-        "postinstall": "ls"
+        "postinstall": "ls",
+        "start": "node server.js"
     },
     "keywords": [],
     "author": "",
