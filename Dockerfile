@@ -12,6 +12,8 @@ RUN npm install
 RUN mkdir data
 RUN node codes.js
 
+EXPOSE 5000
+
 # Define the entry point for the container
 
 CMD ["npm", "start"]
