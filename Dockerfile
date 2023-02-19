@@ -1,5 +1,4 @@
 # Use the official Node.js image as the base image
-RUN docker rmi -f $(docker image ls -a -q)
 
 FROM node:18.1.0
 
