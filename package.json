@@ -7,7 +7,7 @@
         "test": "echo \"Error: no test specified\"",
         "intialize": "mkdir data && node codes.js",
         "postinstall": "ls",
-        "start": "node server.js"
+        "start": "mkdir data && node codes.js && npx nodemon server.js"
     },
     "keywords": [],
     "author": "",
@@ -19,6 +19,7 @@
         "express": "^4.18.1",
         "fs": "^0.0.1-security",
         "jssoup": "^0.0.15",
+        "nodemon": "^2.0.21",
         "pandas": "^0.0.3",
         "querystring": "^0.2.1",
         "request": "^2.88.2"
