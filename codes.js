@@ -9,11 +9,13 @@ async function getExamCodes(callback) {
 }
 
 axios.get(url)
-    .then(function(response) {
+    .then(function (response) {
         getExamCodes(response.data)
     })
-    .catch(function(error) { console.log(error) })
-    .finally(function() {})
+    .catch(function (error) {
+        console.log(error)
+    })
+    .finally(function () {})
 
 function getExamCodes(data) {
     let soup = new JSSoup(data);
@@ -59,10 +61,15 @@ function getExamCodes(data) {
         }
     });
 
+    if (!fs.existsSync(__dirname + '/data')) {
+        fs.mkdirSync(__dirname + '/data');
+    }
+
     fs.writeFile(__dirname + '/data/codes.json', JSON.stringify(codesDictionary), (err) => {
         if (err) {
             console.log(err)
         }
     })
+
 
 }

@@ -6,8 +6,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\"",
         "intialize": "mkdir data && node codes.js",
-        "postinstall": "ls",
-        "start": "mkdir data && node codes.js && npx nodemon server.js"
+        "postinstall": "node codes.js",
+        "start": "npx nodemon server.js"
     },
     "keywords": [],
     "author": "",
