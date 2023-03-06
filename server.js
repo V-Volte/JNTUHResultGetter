@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.use((req, res, err) => {
+app.use((err, req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     res.status(404);
     res.send(JSON.stringify({
@@ -22,21 +22,41 @@ app.use((req, res, err) => {
 app.post('/', (req, res) => {
     let data = req.body;
     console.log(data.htno);
-    scraper.getResults(data.htno, (sdata) => {
+    try {
+        scraper.getResults(data.htno, (sdata) => {
+            res.setHeader('Content-Type', 'application/json');
+            console.log(sdata);
+            res.send(sdata);
+        })
+    } catch (err) {
         res.setHeader('Content-Type', 'application/json');
-        console.log(sdata);
-        res.send(sdata);
-    })
+        res.status(404);
+        res.send(JSON.stringify({
+            status: 404,
+            message: "Not Found"
+        }, null, 4));
+    }
 
 });
 
 app.post('/all', async (req, res) => {
     let data = req.body;
     console.log(data.htno);
-    let sdata = await scraper.getAllResults(data.htno);
-    res.setHeader('Content-Type', 'application/json');
-    console.log(sdata);
-    res.send(sdata);
+
+    try {
+        let sdata = await scraper.getAllResults(data.htno);
+        res.setHeader('Content-Type', 'application/json');
+        console.log(sdata);
+        res.send(sdata);
+    } catch (err) {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(404);
+        res.send(JSON.stringify({
+            status: 404,
+            message: "Not Found"
+        }, null, 4));
+    }
+
 });
 
 app.listen(port, () => {
