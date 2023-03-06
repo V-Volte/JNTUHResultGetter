@@ -22,7 +22,10 @@ class subject {
         this.external = external;
         this.total = total;
     }
+
+
 }
+let codes = JSON.parse(fs.readFileSync(__dirname + '/data/codes.json'));
 
 async function getAllResults(htno, callback) {
     let config = {
@@ -32,7 +35,7 @@ async function getAllResults(htno, callback) {
             "Accept-Encoding": "*"
         }
     }
-    let codes = JSON.parse(fs.readFileSync(__dirname + '/data/codes.json'));
+
 
     let results = new Map();
     let i = 0;
@@ -101,15 +104,16 @@ async function getAllResults(htno, callback) {
     //callback(results);
 }
 
+const config = {
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+        "Accept-Encoding": "*"
+    }
+}
 
 function getResults(htno, /*type = 'ra',*/ callback, examcode = 1605) {
-    let config = {
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-            "Accept-Encoding": "*"
-        }
-    }
+
     // let code = JSON.parse(fs.readFileSync(__dirname + '/data/codes.json'))["1-1"][0];
 
     //TODO: Change examcode and type to not be hardcoded    
@@ -153,6 +157,80 @@ function getResults(htno, /*type = 'ra',*/ callback, examcode = 1605) {
         })
 }
 
+async function allResults(htno) {
+
+    let promises = []
+
+    for (let key in codes) {
+        for (let nkey in codes[key]) {
+            promises.push(
+                axios.post(url, {
+                    "degree": "btech",
+                    "etype": "r17",
+                    "result": "null",
+                    "grad": "null",
+                    "examCode": `${codes[key][nkey]}`,
+                    "type": "intgrade",
+                    "htno": `${htno}`
+                }, config)
+            )
+        }
+    }
+
+    let results = await Promise.all(promises);
+
+    let v = results[0].headers;
+
+    results = results.filter((result) => {
+        return result.headers['content-length'] != 3774;
+    })
+
+    let resultsdata = []
+
+    for (let result in results) {
+
+        let subjects = []
+        let soup = new JSSoup(results[result].data);
+        let tables = soup.findAll("table")
+        let trs = tables[1].findAll("tr");
+        let i = 0;
+        trs.forEach(tr => {
+            if (i == 0) {
+                ++i;
+                return;
+            }
+            let tds = tr.findAll("td");
+            subjects.push(new subject(tds[0].text, tds[1].text, tds[2].text, tds[3].text, tds[4].text, tds[5].text, tds[6].text))
+        });
+
+        trs = tables[0].findAll("tr");
+        tds = trs[0].findAll("td");
+
+        let data = {
+            "name": tds[3].text,
+            "htno": tds[1].text,
+            "subjects": subjects
+        }
+        resultsdata.push(data)
+
+        //console.log(data)
+
+    }
+
+    ret = []
+    xv = []
+
+    // remove duplicates in results
+    for (let result in resultsdata) {
+        if (!xv.includes(JSON.stringify(resultsdata[result])) && result != undefined && !ret.includes(resultsdata[result])) {
+            ret.push(resultsdata[result])
+            xv.push(JSON.stringify(resultsdata[result]))
+        }
+    }
+
+    return ret
+}
+
 function normalizeData(data, callback) {
     let normalized = {};
     for (let key in data) {
@@ -190,5 +268,6 @@ module.exports = {
     subject,
     getResults,
     getAllResults,
-    results
+    results,
+    allResults
 }
