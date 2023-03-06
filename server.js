@@ -6,7 +6,9 @@ const scraper = require(__dirname + '/resultgetter.js')
 const port = process.env.PORT || 5000;
 app.use('/', express.static(__dirname + '/static'))
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 app.post('/', (req, res) => {
     let data = req.body;
@@ -19,6 +21,14 @@ app.post('/', (req, res) => {
 
 });
 
+app.post('/all', async (req, res) => {
+    let data = req.body;
+    console.log(data.htno);
+    let sdata = await scraper.getAllResults(data.htno);
+    res.setHeader('Content-Type', 'application/json');
+    console.log(sdata);
+    res.send(sdata);
+});
 
 app.listen(port, () => {
     console.log("Server started at port " + port);
