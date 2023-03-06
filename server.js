@@ -10,6 +10,15 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+app.use((req, res, err) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.status(404);
+    res.send(JSON.stringify({
+        status: 404,
+        message: "Not Found"
+    }, null, 4));
+})
+
 app.post('/', (req, res) => {
     let data = req.body;
     console.log(data.htno);
