@@ -10,13 +10,13 @@ function toTitleCase(text, isName) {
     if (isName == true) {
         return text.replace(
             /\w\S*/g,
-            function(txt) {
+            function (txt) {
                 return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
             }
         );
     }
     var i, j, str, lowers, uppers;
-    str = text.replace(/([^\W_]+[^\s-]*) */g, function(txt) {
+    str = text.replace(/([^\W_]+[^\s-]*) */g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
 
@@ -27,7 +27,7 @@ function toTitleCase(text, isName) {
     ];
     for (i = 0, j = lowers.length; i < j; i++)
         str = str.replace(new RegExp('\\s' + lowers[i] + '\\s', 'g'),
-            function(txt) {
+            function (txt) {
                 return txt.toLowerCase();
             });
 
@@ -49,7 +49,16 @@ function pushObjectsToTop() {
     document.getElementById('htno').classList.remove('inputoriginal');
     document.getElementById('submit').classList.remove('buttonoriginal');
     document.getElementById('grouper').classList.remove('grouperoriginal');
+    document.getElementById('all').classList.remove('buttonoriginal');
     changed = 1;
+}
+
+function deleteElements(elementList) {
+    elementList.forEach(element => {
+        if (document.body.contains(document.getElementById(element))) {
+            document.getElementById(element).remove();
+        }
+    });
 }
 
 function getResult() {
@@ -64,33 +73,14 @@ function getResult() {
     let xhr = new XMLHttpRequest();
     xhr.open('POST', "/", true);
     xhr.setRequestHeader("Content-type", "application/json");
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
 
         // console.log(this.status)
         // console.log(this.responseText);
 
         if (this.status == 200 || this.status == 304) {
 
-            if (document.body.contains(document.getElementById("table"))) {
-                document.getElementById("table").remove();
-            }
-
-            if (document.body.contains(document.getElementById("name"))) {
-                document.getElementById("name").remove();
-
-            }
-
-            if (document.body.contains(document.getElementById("htnoout"))) {
-                document.getElementById("htnoout").remove();
-            }
-
-            if (document.body.contains(document.getElementById('subjectcontainer'))) {
-                document.getElementById('subjectcontainer').remove();
-            }
-
-            if (document.body.contains(document.getElementById('infodiv'))) {
-                document.getElementById('infodiv').remove();
-            }
+            deleteElements(["table", "name", "htnoout", "subjectcontainer", "infodiv"]);
 
             let hasFailed = false;
 
@@ -123,7 +113,15 @@ function getResult() {
 
             let cg = 0;
             let c = 0;
-            let gvdict = { "O": 10, "A+": 9, "A": 8, "B+": 7, "B": 6, "C": 5, "F": 0 };
+            let gvdict = {
+                "O": 10,
+                "A+": 9,
+                "A": 8,
+                "B+": 7,
+                "B": 6,
+                "C": 5,
+                "F": 0
+            };
 
             // table.appendChild(headingrow);
             for (let subjecta in sdata) {
@@ -188,8 +186,149 @@ function getResult() {
 
 }
 
+function allResults() {
+    let htno = document.getElementById("htno").value;
+    if (!htno) {
+        alert("Enter hallticket number")
+        return;
+    }
+
+    if (changed == 0) pushObjectsToTop();
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', "/all/", true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.onreadystatechange = function () {
+
+        if (this.status == 200) {
+
+
+            let data = JSON.parse(this.responseText);
+            //deepcopy data into a variable called sems
+            let sems = JSON.parse(JSON.stringify(data));
+
+
+            let sgpas = []
+
+            let subjects = []
+            for (let sem of data) {
+                for (let subject of sem.subjects) {
+                    subjects.push(subject);
+                }
+
+                if (sem.subjects.length < 5) continue;
+
+                let hasFailed = false;
+
+                let credits = 0;
+                let cg = 0;
+                let gvdict = {
+                    "O": 10,
+                    "A+": 9,
+                    "A": 8,
+                    "B+": 7,
+                    "B": 6,
+                    "C": 5,
+                    "F": 0
+                };
+
+                for (let subject of sem.subjects) {
+
+                    if (subject.grade == 'F') {
+                        let sameSubject = subjects.find(s => s.subjectCode == subject.subjectCode);
+                        if (sameSubject) {
+                            if (sameSubject.grade != 'F') {
+                                credits += parseFloat(sameSubject['credits']);
+                                cg += parseFloat(sameSubject['credits']) * parseInt(gvdict[sameSubject['grade']]);
+                                let index = subjects.indexOf(subject);
+                                subjects[index] = sameSubject;
+                            } else {
+                                hasFailed = true;
+                                break;
+                            }
+
+                            // replace the subject with the new one
+
+                        }
+                    } else {
+                        credits += parseFloat(subject['credits']);
+                        cg += parseFloat(subject['credits']) * parseInt(gvdict[subject['grade']]);
+                    }
+
+                }
+
+                let sgpa = hasFailed === true ? 0 : cg / credits;
+                sgpas.push(sgpa);
+
+
+
+
+
+            }
+            let cgpa = 0;
+            for (let sgpa of sgpas) {
+                if (sgpa != 0)
+                    cgpa += sgpa;
+                else {
+                    cgpa = 0;
+                    break;
+                }
+            }
+            cgpa /= sgpas.length;
+            cgpa = cgpa.toFixed(2);
+
+            //filter all items with less than 5 subjects from sems
+            sems = sems.filter(sem => sem.subjects.length >= 5);
+            //replace all subjects with grade F in each sem with a subject with the same subject code but with a grade other than F from subjects array
+            for (let sem of sems) {
+                for (let subject of sem.subjects) {
+                    if (subject.grade == 'F') {
+                        let sameSubject = subjects.find(s => s.subjectCode == subject.subjectCode);
+                        if (sameSubject) {
+                            if (sameSubject.grade != 'F') {
+                                let index = sem.subjects.indexOf(subject);
+                                sem.subjects[index] = sameSubject;
+                            }
+                        }
+                    }
+                }
+            }
+
+            //add a field called sgpa to each sem object in sems
+            for (let i = 0; i < sems.length; ++i) {
+                sems[i].sgpa = sgpas[i];
+            }
+
+            //add a field called cgpa to sems
+            sems.cgpa = cgpa;
+
+            buildUI(sems);
+
+            console.log(sems);
+            console.log(cgpa)
+        }
+
+    }
+    xhr.send(JSON.stringify({
+        "htno": `${htno}`,
+    }));
+
+}
+
+function buildUI(sems) {
+    deleteElements(["table", "name", "htnoout", "subjectcontainer", "infodiv"]);
+}
+
 function gradeToValue(str) {
-    let gvdict = { "O": 10, "A+": 9, "A": 8.5, "B+": 8, "B": 7, "C": 6, "F": 0 };
+    let gvdict = {
+        "O": 10,
+        "A+": 9,
+        "A": 8.5,
+        "B+": 8,
+        "B": 7,
+        "C": 6,
+        "F": 0
+    };
     return gvdict[str];
 }
 

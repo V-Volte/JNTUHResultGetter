@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Result-Getter</title>
+        <link rel="stylesheet" href="styles/fonts.css" />
+        <link rel="stylesheet" href="styles/style.css" />
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Result-Getter</title>
-    <link rel="stylesheet" href="styles/fonts.css">
-    <link rel="stylesheet" href="styles/style.css">
-</head>
+    <body>
+        <div class="top cover" id="topcont">
+            <h1>result-getter</h1>
 
-<body>
-
-    <div class="top cover" id='topcont'>
-        <h1>
-            result-getter
-
-        </h1>
-
-        <div class="grouper grouperoriginal" id='grouper'>
-            <input type="text" class="inputoriginal" name="htno" id="htno" placeholder="Hallticket Number">
-            <button class="buttonoriginal" onclick="getResult()" id="submit">Get Results</button>
+            <div class="grouper grouperoriginal" id="grouper">
+                <input
+                    type="text"
+                    class="inputoriginal"
+                    name="htno"
+                    id="htno"
+                    placeholder="Hallticket Number"
+                />
+                <button
+                    class="buttonoriginal"
+                    onclick="getResult()"
+                    id="submit"
+                >
+                    Get Results
+                </button>
+                <button class="buttonoriginal" onclick="allResults()" id="all">
+                    All Results
+                </button>
+            </div>
         </div>
 
-    </div>
-
-    <div class="metacontainer">
-        <div class="container" id="container">
-
+        <div class="metacontainer">
+            <div class="container" id="container"></div>
         </div>
-    </div>
 
-
-    <script src="js/script.js"></script>
-</body>
-
+        <script src="js/script.js"></script>
+    </body>
 </html>
