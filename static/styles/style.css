@@ -182,7 +182,7 @@ th {
 .subject {
     width: 65vw;
     display: grid;
-    grid-template-columns: 88% 5% 5% 2%;
+    grid-template-columns: 10% 78% 5% 5%;
     background-color: #292929;
     padding: 0 25px 0 25px;
     position: relative;
@@ -209,6 +209,10 @@ th {
 .subject h2 {
     font-family: 'Figtree', sans-serif;
     font-weight: 500;
+}
+
+.mainlink:link {
+    text-decoration: none;
 }
 
 .subjectcontainer {
@@ -257,8 +261,42 @@ span.sgpa {
         width: 80vw;
     }
     .subject {
-        grid-template-columns: 70% 15% 15%;
+        grid-template-columns: 10% 60% 15% 15%;
     }
+}
+
+.sgpacontainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin-top: 20px;
+}
+
+.sgpacontainer * {
+    font-family: 'Figtree';
+}
+
+.sgpacontainer h2 {
+    font-family: 'Figtree';
+    font-weight: 500;
+    font-size: 2rem;
+}
+
+.sgpano {
+    font-weight: 400;
+    color: white;
+}
+
+.sgpacontainer .sgpa {
+    color: #9F9F9F;
+    font-weight: 100;
+}
+
+.subjectCode {
+    font-weight: 100;
+    color: rgba(255, 0, 236, 0.6);
+    font-family: 'Figtree';
 }
 
 

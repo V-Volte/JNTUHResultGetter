@@ -53,12 +53,12 @@ function pushObjectsToTop() {
     changed = 1;
 }
 
-function deleteElements(elementList) {
-    elementList.forEach(element => {
-        if (document.body.contains(document.getElementById(element))) {
-            document.getElementById(element).remove();
-        }
-    });
+function deleteElements(elementList = []) {
+    // remove all children of the element with id container
+    let container = document.getElementById("container");
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
 }
 
 function getResult() {
@@ -111,65 +111,55 @@ function getResult() {
             subjectContainer.classList.add('subjectcontainer');
             subjectContainer.id = 'subjectcontainer';
 
-            let cg = 0;
-            let c = 0;
-            let gvdict = {
-                "O": 10,
-                "A+": 9,
-                "A": 8,
-                "B+": 7,
-                "B": 6,
-                "C": 5,
-                "F": 0
-            };
+
 
             // table.appendChild(headingrow);
-            for (let subjecta in sdata) {
-                console.log(subjecta);
-                let subject = sdata[subjecta];
-                //let row = document.createElement("tr");
+            // for (let subjecta in sdata) {
+            //     console.log(subjecta);
+            //     let subject = sdata[subjecta];
+            //     //let row = document.createElement("tr");
 
-                c += parseFloat(subject['credits']);
-                cg += parseFloat(subject['credits']) * parseInt(gvdict[subject['grade']]);
+            //     c += parseFloat(subject['credits']);
+            //     cg += parseFloat(subject['credits']) * parseInt(gvdict[subject['grade']]);
 
-                // for (let key in subject) {
-                //     if (subject.hasOwnProperty(key)) {
-                //         let cell = document.createElement("td");
-                //         cell.innerHTML = (key == 'subjectName' ? toTitleCase(subject[key], false) : subject[key]);
-                //         row.appendChild(cell);
-                //     }
-                // }
+            //     // for (let key in subject) {
+            //     //     if (subject.hasOwnProperty(key)) {
+            //     //         let cell = document.createElement("td");
+            //     //         cell.innerHTML = (key == 'subjectName' ? toTitleCase(subject[key], false) : subject[key]);
+            //     //         row.appendChild(cell);
+            //     //     }
+            //     // }
 
-                let subjectElement = document.createElement("div");
-                subjectElement.classList.add("subject");
-                console.log(subject);
-                h2s = []
-                for (let i = 0; i < 4; ++i) {
-                    h2s.push(document.createElement("h2"));
-                }
+            //     let subjectElement = document.createElement("div");
+            //     subjectElement.classList.add("subject");
+            //     console.log(subject);
+            //     h2s = []
+            //     for (let i = 0; i < 4; ++i) {
+            //         h2s.push(document.createElement("h2"));
+            //     }
 
-                if (subject.grade == 'F') hasFailed = true;
+            //     if (subject.grade == 'F') hasFailed = true;
 
-                h2s[0].innerHTML = toTitleCase(subject.subjectName, false);
-                h2s[0].classList.add('subjectName');
-                h2s[1].innerHTML = subject.total;
-                h2s[2].innerHTML = subject.grade;
-                h2s[2].classList.add('subjectGrade');
-                h2s[3].innerHTML = " ";
+            //     h2s[0].innerHTML = toTitleCase(subject.subjectName, false);
+            //     h2s[0].classList.add('subjectName');
+            //     h2s[1].innerHTML = subject.total;
+            //     h2s[2].innerHTML = subject.grade;
+            //     h2s[2].classList.add('subjectGrade');
+            //     h2s[3].innerHTML = " ";
 
-                for (let i = 0; i < 3; ++i) subjectElement.appendChild(h2s[i]);
+            //     for (let i = 0; i < 3; ++i) subjectElement.appendChild(h2s[i]);
 
-                // table.appendChild(row);
-                subjectContainer.appendChild(subjectElement);
-            }
+            //     // table.appendChild(row);
+            //     subjectContainer.appendChild(subjectElement);
+            // }
+            let cgpa = createSubjects(sdata, subjectContainer, true);
 
-            let cgpa = cg / c;
             if (document.getElementById('container').contains(document.getElementById('CGPA'))) {
                 document.getElementById('container').removeChild(document.getElementById('CGPA'));
             }
             let CGPA = document.createElement("h1");
             CGPA.id = 'CGPA';
-            CGPA.innerHTML = `${hasFailed ? 'No' : cgpa.toFixed(2)} <span class = "sgpa"> SGPA </span>`;
+            CGPA.innerHTML = `${cgpa == 0 ? 'No' : cgpa.toFixed(2)} <span class = "sgpa"> SGPA </span>`;
 
             infoDiv.appendChild(CGPA);
             document.getElementById('container').appendChild(infoDiv);
@@ -316,17 +306,142 @@ function allResults() {
 }
 
 function buildUI(sems) {
-    deleteElements(["table", "name", "htnoout", "subjectcontainer", "infodiv"]);
+    deleteElements();
+
+    let infoDiv = document.createElement("div");
+    infoDiv.id = 'infodiv';
+    infoDiv.classList.add('infodiv');
+
+    let nh = document.createElement('h1');
+    nh.id = "name";
+    nh.innerHTML = `${sems[0].name}`;
+    infoDiv.appendChild(nh);
+
+    let semslist = [
+        "I Year I Semester",
+        "I Year II Semester",
+        "II Year I Semester",
+        "II Year II Semester",
+        "III Year I Semester",
+        "III Year II Semester",
+        "IV Year I Semester",
+        "IV Year II Semester"
+    ]
+
+    let subjectContainers = [];
+    // table.appendChild(headingrow);
+    for (let sem of sems) {
+        let subjectContainer = document.createElement("div");
+        subjectContainer.classList.add('subjectcontainer');
+        subjectContainer.id = `subjectcontainer${sems.indexOf(sem)}`;
+
+        let sgpacontainer = document.createElement("div");
+        sgpacontainer.classList.add('sgpacontainer');
+        sgpacontainer.id = `sgpacontainer${sems.indexOf(sem)}`;
+
+        let h1 = document.createElement("h2");
+        h1.innerHTML = semslist[sems.indexOf(sem)];
+        h1.classList.add('semname');
+        sgpacontainer.appendChild(h1);
+
+        let h2 = document.createElement("h2");
+        h2.innerHTML = `<span class='sgpano'>${sem.sgpa.toFixed(2)}</span> SGPA`;
+        h2.classList.add('sgpa');
+        sgpacontainer.appendChild(h2);
+
+        subjectContainer.appendChild(sgpacontainer);
+        subjectContainers.push(subjectContainer);
+
+        // for (let subject of sem.subjects) {
+
+        //     let subjectElement = document.createElement("div");
+        //     subjectElement.classList.add("subject");
+        //     console.log(subject);
+        //     h2s = []
+        //     for (let i = 0; i < 4; ++i) {
+        //         h2s.push(document.createElement("h2"));
+        //     }
+
+        //     if (subject.grade == 'F') hasFailed = true;
+
+        //     h2s[0].innerHTML = subject.subjectName ? toTitleCase(subject.subjectName, false) : "";
+        //     h2s[0].classList.add('subjectName');
+        //     h2s[1].innerHTML = subject.total;
+        //     h2s[2].innerHTML = subject.grade;
+        //     h2s[2].classList.add('subjectGrade');
+        //     h2s[3].innerHTML = " ";
+
+        //     for (let i = 0; i < 3; ++i) subjectElement.appendChild(h2s[i]);
+
+        //     // table.appendChild(row);
+        //     subjectContainer.appendChild(subjectElement);
+        // }
+
+        createSubjects(sem.subjects, subjectContainer);
+    }
+
+    if (document.getElementById('container').contains(document.getElementById('CGPA'))) {
+        document.getElementById('container').removeChild(document.getElementById('CGPA'));
+    }
+    let CGPA = document.createElement("h1");
+    CGPA.id = 'CGPA';
+    CGPA.innerHTML = `${sems.cgpa > 0 ? sems.cgpa : "No"} <span class = "sgpa"> CGPA </span>`;
+
+    infoDiv.appendChild(CGPA);
+    document.getElementById('container').appendChild(infoDiv);
+    // document.getElementById('container').append(table);
+    for (let subjectContainer of subjectContainers) {
+        document.getElementById('container').appendChild(subjectContainer);
+    }
+}
+//else document.write("Error " + this.status);
+
+function createSubjects(subjects, subjectContainer, getSGPA = false) {
+    let hasFailed = false;
+    let totalCredits = 0;
+    let cg = 0;
+    for (let subject of subjects) {
+        let subjectElement = document.createElement("div");
+        subjectElement.classList.add("subject");
+        console.log(subject);
+        h2s = []
+        for (let i = 0; i < 4; ++i) {
+            h2s.push(document.createElement("h2"));
+        }
+
+        if (subject.grade == 'F') hasFailed = true;
+
+        h2s[0].innerHTML = subject.subjectCode ? subject.subjectCode : " ";
+        h2s[0].classList.add('subjectCode');
+        h2s[1].innerHTML = subject.subjectName ? toTitleCase(subject.subjectName, false) : " ";
+        h2s[1].classList.add('subjectName');
+        h2s[2].innerHTML = subject.total;
+        h2s[3].innerHTML = subject.grade;
+        h2s[3].classList.add('subjectGrade');
+
+        for (let i = 0; i < 4; ++i) subjectElement.appendChild(h2s[i]);
+
+        if (getSGPA && !hasFailed) {
+            totalCredits += parseFloat(subject.credits)
+            cg += parseInt(gradeToValue(subject.grade)) * parseFloat(subject.credits);
+
+            if (subject.grade == 'F') hasFailed = true;
+        }
+
+        // table.appendChild(row);
+        subjectContainer.appendChild(subjectElement);
+    }
+    return hasFailed ? 0 : cg / totalCredits;
 }
 
 function gradeToValue(str) {
     let gvdict = {
         "O": 10,
         "A+": 9,
-        "A": 8.5,
-        "B+": 8,
-        "B": 7,
-        "C": 6,
+        "A": 8,
+        "B+": 7,
+        "B": 6,
+        "C": 5,
         "F": 0
     };
     return gvdict[str];
