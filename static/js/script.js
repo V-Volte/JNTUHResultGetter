@@ -75,14 +75,9 @@ function getResult() {
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function () {
 
-        // console.log(this.status)
-        // console.log(this.responseText);
-
         if (this.status == 200 || this.status == 304) {
 
             deleteElements(["table", "name", "htnoout", "subjectcontainer", "infodiv"]);
-
-            let hasFailed = false;
 
             let data = JSON.parse(this.responseText);
             let sdata = data["subjects"];
@@ -97,61 +92,11 @@ function getResult() {
             nh.innerHTML = `${name}`;
             infoDiv.appendChild(nh);
 
-            // let table = document.createElement("table");
-            // table.id = "table";
-            // let headingrow = document.createElement("tr");
-            // let headings = ["Subject Code", "Subject Name", "Internal Marks", "External Marks", "Total Marks", "Grade", "Credits"];
-            // headings.forEach(heading => {
-            //     let headingcell = document.createElement("th");
-            //     headingcell.innerHTML = heading;
-            //     headingrow.appendChild(headingcell);
-            // });
 
             let subjectContainer = document.createElement("div");
             subjectContainer.classList.add('subjectcontainer');
             subjectContainer.id = 'subjectcontainer';
 
-
-
-            // table.appendChild(headingrow);
-            // for (let subjecta in sdata) {
-            //     console.log(subjecta);
-            //     let subject = sdata[subjecta];
-            //     //let row = document.createElement("tr");
-
-            //     c += parseFloat(subject['credits']);
-            //     cg += parseFloat(subject['credits']) * parseInt(gvdict[subject['grade']]);
-
-            //     // for (let key in subject) {
-            //     //     if (subject.hasOwnProperty(key)) {
-            //     //         let cell = document.createElement("td");
-            //     //         cell.innerHTML = (key == 'subjectName' ? toTitleCase(subject[key], false) : subject[key]);
-            //     //         row.appendChild(cell);
-            //     //     }
-            //     // }
-
-            //     let subjectElement = document.createElement("div");
-            //     subjectElement.classList.add("subject");
-            //     console.log(subject);
-            //     h2s = []
-            //     for (let i = 0; i < 4; ++i) {
-            //         h2s.push(document.createElement("h2"));
-            //     }
-
-            //     if (subject.grade == 'F') hasFailed = true;
-
-            //     h2s[0].innerHTML = toTitleCase(subject.subjectName, false);
-            //     h2s[0].classList.add('subjectName');
-            //     h2s[1].innerHTML = subject.total;
-            //     h2s[2].innerHTML = subject.grade;
-            //     h2s[2].classList.add('subjectGrade');
-            //     h2s[3].innerHTML = " ";
-
-            //     for (let i = 0; i < 3; ++i) subjectElement.appendChild(h2s[i]);
-
-            //     // table.appendChild(row);
-            //     subjectContainer.appendChild(subjectElement);
-            // }
             let cgpa = createSubjects(sdata, subjectContainer, true);
 
             if (document.getElementById('container').contains(document.getElementById('CGPA'))) {
@@ -246,14 +191,8 @@ function allResults() {
                     }
 
                 }
-
                 let sgpa = hasFailed === true ? 0 : cg / credits;
                 sgpas.push(sgpa);
-
-
-
-
-
             }
             let cgpa = 0;
             for (let sgpa of sgpas) {
@@ -294,8 +233,6 @@ function allResults() {
 
             buildUI(sems);
 
-            console.log(sems);
-            console.log(cgpa)
         }
 
     }
@@ -352,30 +289,7 @@ function buildUI(sems) {
         subjectContainer.appendChild(sgpacontainer);
         subjectContainers.push(subjectContainer);
 
-        // for (let subject of sem.subjects) {
 
-        //     let subjectElement = document.createElement("div");
-        //     subjectElement.classList.add("subject");
-        //     console.log(subject);
-        //     h2s = []
-        //     for (let i = 0; i < 4; ++i) {
-        //         h2s.push(document.createElement("h2"));
-        //     }
-
-        //     if (subject.grade == 'F') hasFailed = true;
-
-        //     h2s[0].innerHTML = subject.subjectName ? toTitleCase(subject.subjectName, false) : "";
-        //     h2s[0].classList.add('subjectName');
-        //     h2s[1].innerHTML = subject.total;
-        //     h2s[2].innerHTML = subject.grade;
-        //     h2s[2].classList.add('subjectGrade');
-        //     h2s[3].innerHTML = " ";
-
-        //     for (let i = 0; i < 3; ++i) subjectElement.appendChild(h2s[i]);
-
-        //     // table.appendChild(row);
-        //     subjectContainer.appendChild(subjectElement);
-        // }
 
         createSubjects(sem.subjects, subjectContainer);
     }
@@ -394,7 +308,6 @@ function buildUI(sems) {
         document.getElementById('container').appendChild(subjectContainer);
     }
 }
-//else document.write("Error " + this.status);
 
 function createSubjects(subjects, subjectContainer, getSGPA = false) {
     let hasFailed = false;
@@ -403,7 +316,6 @@ function createSubjects(subjects, subjectContainer, getSGPA = false) {
     for (let subject of subjects) {
         let subjectElement = document.createElement("div");
         subjectElement.classList.add("subject");
-        console.log(subject);
         h2s = []
         for (let i = 0; i < 4; ++i) {
             h2s.push(document.createElement("h2"));
