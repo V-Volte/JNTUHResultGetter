@@ -62,7 +62,7 @@ const config = {
     }
 }
 
-function getResults(htno, /*type = 'ra',*/ callback, examcode = 1605) {
+function getResults(htno, /*type = 'ra',*/ callback, examcode = 1645) {
     axios.post(url, {
             "degree": "btech",
             "etype": "r17",
