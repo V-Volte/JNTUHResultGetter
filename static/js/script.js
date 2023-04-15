@@ -282,7 +282,7 @@ function buildUI(sems) {
         sgpacontainer.appendChild(h1);
 
         let h2 = document.createElement("h2");
-        h2.innerHTML = `<span class='sgpano'>${sem.sgpa.toFixed(2)}</span> SGPA`;
+        h2.innerHTML = `<span class='sgpano'>${sem.sgpa == 0 ? 'No' : sem.sgpa.toFixed(2)}</span> SGPA`;
         h2.classList.add('sgpa');
         sgpacontainer.appendChild(h2);
 
