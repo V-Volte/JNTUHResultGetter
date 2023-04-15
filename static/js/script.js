@@ -206,8 +206,12 @@ function allResults() {
             cgpa /= sgpas.length;
             cgpa = cgpa.toFixed(2);
 
-            //filter all items with less than 5 subjects from sems
-            sems = sems.filter(sem => sem.subjects.length >= 5);
+            //filter all items with no lab subjects from sems (all supplementary exams)
+            sems = sems.filter((sem) => {
+                for (let subject of sem.subjects)
+                    if (subject.subjectCode[3].match(/[0-9]/)) return true;
+                return false;
+            });
             //replace all subjects with grade F in each sem with a subject with the same subject code but with a grade other than F from subjects array
             for (let sem of sems) {
                 for (let subject of sem.subjects) {
