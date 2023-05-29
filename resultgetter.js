@@ -22,9 +22,8 @@ class subject {
         this.external = external;
         this.total = total;
     }
-
-
 }
+
 let codes = JSON.parse(fs.readFileSync(__dirname + '/data/codes.json'));
 
 function getSubjects(input) {
@@ -120,7 +119,6 @@ async function getAllResults(htno) {
         }
     }
 
-
     let results = await Promise.all(promises);
 
     // Filter out all results with content-length 3774 (results homepage)
@@ -140,11 +138,6 @@ async function getAllResults(htno) {
     resultsdata = resultsdata.filter((result) => {
         return result != "PlaceholderSubject";
     })
-
-    console.log("Resultsdata");
-    for (let result of resultsdata) console.log(result);
-    console.log("End Resultsdata");
-    console.log(resultsdata.length);
 
     ret = []
     xv = []

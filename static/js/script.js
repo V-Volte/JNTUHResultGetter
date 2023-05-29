@@ -156,36 +156,20 @@ function allResults() {
             }
 
             for (let sem of data) {
-                // for (let subject of sem.subjects) {
-                //     subjects.push(subject);
-                // }
-
                 if (sem.subjects.length < 5) continue;
 
                 let hasFailed = false;
-
                 let credits = 0;
                 let cg = 0;
-                let gvdict = {
-                    "O": 10,
-                    "A+": 9,
-                    "A": 8,
-                    "B+": 7,
-                    "B": 6,
-                    "C": 5,
-                    "F": 0
-                };
 
                 for (let subject of sem.subjects) {
-
                     if (subject.grade == 'F') {
                         let sameSubject = subjects.find(s => s.subjectCode == subject.subjectCode && s.grade != 'F');
                         if (sameSubject) {
                             credits += parseFloat(sameSubject['credits']);
-                            cg += parseFloat(sameSubject['credits']) * parseInt(gvdict[sameSubject['grade']]);
+                            cg += parseFloat(sameSubject['credits']) * parseInt(gradeToValue(sameSubject['grade']));
                             let index = subjects.indexOf(subject);
                             subjects[index] = sameSubject;
-                            // replace the subject with the new one
                         }
                         else {
                             hasFailed = true;
@@ -193,13 +177,13 @@ function allResults() {
                         }
                     } else {
                         credits += parseFloat(subject['credits']);
-                        cg += parseFloat(subject['credits']) * parseInt(gvdict[subject['grade']]);
+                        cg += parseFloat(subject['credits']) * parseInt(gradeToValue(subject['grade']));
                     }
-
                 }
                 let sgpa = hasFailed === true ? 0 : cg / credits;
                 sgpas.push(sgpa);
             }
+            
             let cgpa = 0;
             for (let sgpa of sgpas) {
                 if (sgpa != 0)
@@ -240,11 +224,8 @@ function allResults() {
 
             //add a field called cgpa to sems
             sems.cgpa = cgpa;
-
             buildUI(sems);
-
         }
-
     }
     xhr.send(JSON.stringify({
         "htno": `${htno}`,
@@ -298,8 +279,6 @@ function buildUI(sems) {
 
         subjectContainer.appendChild(sgpacontainer);
         subjectContainers.push(subjectContainer);
-
-
 
         createSubjects(sem.subjects, subjectContainer);
     }
