@@ -53,7 +53,8 @@ app.post('/all', async (req, res) => {
         res.status(404);
         res.send(JSON.stringify({
             status: 404,
-            message: "Not Found"
+            message: "Not Found",
+            err: err
         }, null, 4));
     }
 

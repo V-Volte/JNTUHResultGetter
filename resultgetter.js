@@ -28,27 +28,33 @@ class subject {
 let codes = JSON.parse(fs.readFileSync(__dirname + '/data/codes.json'));
 
 function getSubjects(input) {
-    let subjects = []
-    let soup = new JSSoup(input.data);
-    let tables = soup.findAll("table")
-    let trs = tables[1].findAll("tr");
-    let i = 0;
-    trs.forEach(tr => {
-        if (i == 0) {
-            ++i;
-            return;
+    try {
+        let subjects = []
+        let soup = new JSSoup(input.data);
+        
+        let tables = soup.findAll("table")        
+        let trs = tables[1].findAll("tr");
+        let i = 0;
+        trs.forEach(tr => {
+            if (i == 0) {
+                ++i;
+                return;
+            }
+            let tds = tr.findAll("td");
+            subjects.push(new subject(tds[0].text, tds[1].text, tds[2].text, tds[3].text, tds[4].text, tds[5].text, tds[6].text))
+        });
+
+        trs = tables[0].findAll("tr");
+        tds = trs[0].findAll("td");
+
+        return {
+            "name": tds[3].text,
+            "htno": tds[1].text,
+            "subjects": subjects
         }
-        let tds = tr.findAll("td");
-        subjects.push(new subject(tds[0].text, tds[1].text, tds[2].text, tds[3].text, tds[4].text, tds[5].text, tds[6].text))
-    });
-
-    trs = tables[0].findAll("tr");
-    tds = trs[0].findAll("td");
-
-    return {
-        "name": tds[3].text,
-        "htno": tds[1].text,
-        "subjects": subjects
+    } catch (err) {
+        console.log(err);
+        return "PlaceholderSubject";
     }
 }
 
@@ -83,6 +89,8 @@ function getResults(htno, /*type = 'ra',*/ callback, examcode = 1645) {
 
 async function getAllResults(htno) {
 
+    try {
+
     let promises = []
 
     for (let key in codes) {
@@ -98,14 +106,26 @@ async function getAllResults(htno) {
                     "htno": `${htno}`
                 }, config)
             )
+            promises.push(
+                axios.post(url, {
+                    "degree": "btech",
+                    "etype": "r17",
+                    "result": "gradercrv",
+                    "grad": "null",
+                    "examCode": `${codes[key][nkey]}`,
+                    "type": "rcrvintgrade",
+                    "htno": `${htno}`
+                }, config)
+            )
         }
     }
+
 
     let results = await Promise.all(promises);
 
     // Filter out all results with content-length 3774 (results homepage)
     results = results.filter((result) => {
-        return result.headers['content-length'] != 3774;
+        return result.headers['content-length'] != 3774 ;
     })
 
     let resultsdata = []
@@ -113,6 +133,18 @@ async function getAllResults(htno) {
     for (let result in results) {
         resultsdata.push(getSubjects(results[result]))
     }
+
+    console.log(resultsdata.length);
+
+    //Remove all "PlaceholderSubject" results
+    resultsdata = resultsdata.filter((result) => {
+        return result != "PlaceholderSubject";
+    })
+
+    console.log("Resultsdata");
+    for (let result of resultsdata) console.log(result);
+    console.log("End Resultsdata");
+    console.log(resultsdata.length);
 
     ret = []
     xv = []
@@ -123,6 +155,10 @@ async function getAllResults(htno) {
             ret.push(resultsdata[result])
             xv.push(JSON.stringify(resultsdata[result]))
         }
+    }
+
+    } catch (err) {
+        console.log("Err" + err)
     }
 
     return ret

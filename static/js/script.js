@@ -142,14 +142,23 @@ function allResults() {
             //deepcopy data into a variable called sems
             let sems = JSON.parse(JSON.stringify(data));
 
+            console.log(sems);
+
 
             let sgpas = []
 
             let subjects = []
-            for (let sem of data) {
-                for (let subject of sem.subjects) {
+
+            for(let sem of data){
+                for(let subject of sem.subjects){
                     subjects.push(subject);
                 }
+            }
+
+            for (let sem of data) {
+                // for (let subject of sem.subjects) {
+                //     subjects.push(subject);
+                // }
 
                 if (sem.subjects.length < 5) continue;
 
@@ -170,20 +179,17 @@ function allResults() {
                 for (let subject of sem.subjects) {
 
                     if (subject.grade == 'F') {
-                        let sameSubject = subjects.find(s => s.subjectCode == subject.subjectCode);
+                        let sameSubject = subjects.find(s => s.subjectCode == subject.subjectCode && s.grade != 'F');
                         if (sameSubject) {
-                            if (sameSubject.grade != 'F') {
-                                credits += parseFloat(sameSubject['credits']);
-                                cg += parseFloat(sameSubject['credits']) * parseInt(gvdict[sameSubject['grade']]);
-                                let index = subjects.indexOf(subject);
-                                subjects[index] = sameSubject;
-                            } else {
-                                hasFailed = true;
-                                break;
-                            }
-
+                            credits += parseFloat(sameSubject['credits']);
+                            cg += parseFloat(sameSubject['credits']) * parseInt(gvdict[sameSubject['grade']]);
+                            let index = subjects.indexOf(subject);
+                            subjects[index] = sameSubject;
                             // replace the subject with the new one
-
+                        }
+                        else {
+                            hasFailed = true;
+                                break;
                         }
                     } else {
                         credits += parseFloat(subject['credits']);
