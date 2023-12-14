@@ -142,6 +142,7 @@ function allResults() {
             //deepcopy data into a variable called sems
             let sems = JSON.parse(JSON.stringify(data));
 
+            data = [...new Set(data)];
             console.log(sems);
 
 

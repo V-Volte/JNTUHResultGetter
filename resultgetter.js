@@ -46,10 +46,14 @@ function getSubjects(input) {
         trs = tables[0].findAll("tr");
         tds = trs[0].findAll("td");
 
+        let rdata = input.config["data"];
+        let rcode = rdata.match(/.*examCode=([0-9]{4}).*/)[1]
+            
         return {
             "name": tds[3].text,
             "htno": tds[1].text,
-            "subjects": subjects
+            "subjects": [...new Set(subjects)],
+            "examCode": parseInt(rcode)
         }
     } catch (err) {
         console.log(err);
@@ -86,75 +90,94 @@ function getResults(htno, /*type = 'ra',*/ callback, examcode = 1645) {
         })
 }
 
+async function getAxiosPromise(result, examcode, type, htno) {
+    return new Promise()
+}
+
 async function getAllResults(htno) {
 
+    nret = []
     try {
 
-    let promises = []
+        let promises = []
 
-    for (let key in codes) {
-        for (let nkey in codes[key]) {
-            promises.push(
-                axios.post(url, {
-                    "degree": "btech",
-                    "etype": "r17",
-                    "result": "null",
-                    "grad": "null",
-                    "examCode": `${codes[key][nkey]}`,
-                    "type": "intgrade",
-                    "htno": `${htno}`
-                }, config)
-            )
-            promises.push(
-                axios.post(url, {
-                    "degree": "btech",
-                    "etype": "r17",
-                    "result": "gradercrv",
-                    "grad": "null",
-                    "examCode": `${codes[key][nkey]}`,
-                    "type": "rcrvintgrade",
-                    "htno": `${htno}`
-                }, config)
-            )
+        for (let key in codes) {
+            for (let nkey in codes[key]) {
+                promises.push(
+                    axios.post(url, {
+                        "degree": "btech",
+                        "etype": "r17",
+                        "result": "null",
+                        "grad": "null",
+                        "examCode": `${codes[key][nkey]}`,
+                        "type": "intgrade",
+                        "htno": `${htno}`
+                    }, config)
+                    
+                )
+                promises.push(
+                    axios.post(url, {
+                        "degree": "btech",
+                        "etype": "r17",
+                        "result": "gradercrv",
+                        "grad": "null",
+                        "examCode": `${codes[key][nkey]}`,
+                        "type": "rcrvintgrade",
+                        "htno": `${htno}`
+                    }, config)
+                    
+                )
+            }
         }
-    }
 
-    let results = await Promise.all(promises);
+        let results = await Promise.all(promises);
 
-    // Filter out all results with content-length 3774 (results homepage)
-    results = results.filter((result) => {
-        return result.headers['content-length'] != 3774 ;
-    })
+        
 
-    let resultsdata = []
+        // Filter out all results with content-length 3774 (results homepage)
+        results = results.filter((result) => {
+            return result.headers['content-length'] != 3774 ;
+        })
 
-    for (let result in results) {
-        resultsdata.push(getSubjects(results[result]))
-    }
+        // results.sort((a,b)=> {
+        //     let adata = a.config.data;
+        //     let acode = adata.match(/.*examCode=([0-9]{4}).*/)
+        //     let bdata = b.config.data;
+        //     let bcode = bdata.match(/.*examCode=([0-9]{4}).*/)
 
-    console.log(resultsdata.length);
+        //     return parseInt(bcode) > parseInt(acode)
+        // })
 
-    //Remove all "PlaceholderSubject" results
-    resultsdata = resultsdata.filter((result) => {
-        return result != "PlaceholderSubject";
-    })
+        let resultsdata = []
+        let resultcodes = new Set()
 
-    ret = []
-    xv = []
+        // Adding unique results only
 
-    // remove duplicates in results
-    for (let result in resultsdata) {
-        if (!xv.includes(JSON.stringify(resultsdata[result])) && result != undefined && !ret.includes(resultsdata[result])) {
-            ret.push(resultsdata[result])
-            xv.push(JSON.stringify(resultsdata[result]))
+        for (let result in results) {
+            let subjects = getSubjects(results[result])
+            if (!resultcodes.has(subjects.examCode)) {
+                resultsdata.push(subjects);
+                resultcodes.add(subjects.examCode)
+            }        
         }
-    }
+
+        console.log(resultsdata.length);
+
+        //Remove all "PlaceholderSubject" results
+        resultsdata = resultsdata.filter((result) => {
+            return result != "PlaceholderSubject";
+        })
+
+        nret = [...resultsdata]
+
+        // Sort by examCode to ensure correct order
+        nret.sort((a,b)=> a.examCode - b.examCode)
 
     } catch (err) {
         console.log("Err" + err)
     }
 
-    return ret
+    return nret
 }
 
 // TODO: Implement this
