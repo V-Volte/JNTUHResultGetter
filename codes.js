@@ -61,6 +61,10 @@ function getExamCodes(data) {
         }
     });
 
+    for(let key in codesDictionary) {
+        codesDictionary[key] = [...new Set(codesDictionary[key])]
+    }
+
     if (!fs.existsSync(__dirname + '/data')) {
         fs.mkdirSync(__dirname + '/data');
     }
